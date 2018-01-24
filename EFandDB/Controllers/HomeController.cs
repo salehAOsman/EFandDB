@@ -18,6 +18,7 @@ namespace EFandDB.Controllers
             //object for list to get data out of the tables
             List<Student> myStudent = db.Students.ToList();
 
+
             return View(myStudent);
         }
 
