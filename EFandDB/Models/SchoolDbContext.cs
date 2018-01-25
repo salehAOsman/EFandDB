@@ -7,9 +7,9 @@ using System.Web;
 namespace EFandDB.Models
 {
     //reference to DataBase
-    public class SchooleDbContext:DbContext
+    public class SchoolDbContext:DbContext
     {
-        public SchooleDbContext() :base("name=SchooleDbContext")
+        public SchoolDbContext() :base("name=SchoolDbContext")
         {
 
         }
@@ -20,5 +20,11 @@ namespace EFandDB.Models
         //public DbSet<Teacher> Teachers { get; set; }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<Assignment> Assignments { get; set; }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Teacher> Teachers { get; set; }
     }
 }
