@@ -1,10 +1,10 @@
 ﻿@model EFandDB.Models.Assignment
 
 @{
-    ViewBag.Title = "Details Assignment";
+    ViewBag.Title = "Details";
 }
 
-<h2>Details Assignment</h2>
+<h2>Details</h2>
 
 <div>
     <h4>Assignment</h4>
@@ -16,6 +16,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descriptions)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descriptions)
         </dd>
 
     </dl>
