@@ -17,16 +17,13 @@ namespace EFandDB.Controllers
         {
             //object for list to get data out of the tables
             List<Student> myStudent = db.Students.ToList();
-
-
             return View(myStudent);
         }
 
         //public ActionResult Create()
         //{
         //    Student myStudent = new Student();
-
-        //    myStudent.Name = "Samer";
+                //    myStudent.Name = "Samer";
         //    myStudent.City = "Karlskrona";
         //    // we need to retern this info to data base by this code we have obj for dbase and name of table 
         //    db.Students.Add(myStudent);//add bobbo to DB
