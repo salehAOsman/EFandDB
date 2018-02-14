@@ -20,21 +20,54 @@ namespace EFandDB.Controllers
             return View(db.Students.ToList());
         }
 
-        // GET: Students/Details/5
+        // GET: Students/Details/5  
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == id);
+
             if (student == null)
             {
                 return HttpNotFound();
             }
+
             return View(student);
         }
 
+        //
+        //3 we will create 'AddCourseToStudent'
+        //GET: Students/AddCourseToStudent
+        //4 create view 
+        [HttpGet]
+        public ActionResult AddCourseToStudent(int? sId)
+        {
+            if (sId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            List<Course> courses = db.Courses.ToList();//reference to Couses list
+
+            ViewBag.sId = sId;//Student Id
+    
+            return View(courses);
+        }
+        //5 create 'CourseToStudent' action 
+        //6 change details view 
+        [HttpGet]
+        public ActionResult CourseToStudent(int? cId,int? sId)
+        {
+            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
+
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            student.Courses.Add(course);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = sId });
+        }
         // GET: Students/Create
         public ActionResult Create()
         {
