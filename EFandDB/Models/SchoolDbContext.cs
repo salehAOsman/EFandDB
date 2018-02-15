@@ -11,10 +11,9 @@ namespace EFandDB.Models
     {
         public SchoolDbContext() :base("name=SchoolDbContext")
         {
-
         }
-        //dbSet object to representing rows inside Dbase tables 
-
+        
+        //dbSet object to representing rows inside Dbase tables
         //public DbSet<Course> Courses { get; set; }
         //public DbSet<Assignment> Assignments { get; set; }
         //public DbSet<Teacher> Teachers { get; set; }
