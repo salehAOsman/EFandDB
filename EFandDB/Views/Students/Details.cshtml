@@ -24,38 +24,43 @@ How can i use view model here to drow table for courses????
 
 <!--2 we add here div to display subList of courses for this student-->
 <h2>Index SubCourse in student side</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-                @*@Html.DisplayNameFor(model => model.Name)*@
-            </th>
-            <th>
-                Description
-                @*@Html.DisplayNameFor(model => model.Description)*@
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model.Courses)
-        {
+@if (Model.Courses.Count > 0)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+                <th>
+                    @*Name*@
+                    @Html.DisplayNameFor(model => model.Courses[0].Name)
+                </th>
+                <th>
+                    @*Description*@
+                    @Html.DisplayNameFor(model => model.Courses[0].Description)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
-<!--3 now we have to change in 'Details' action to be as 'AddCourseToStudent' in student controller -->
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Courses)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", "Courses", new { id = item.Id }, new { @class = "btn btn-info" }) |*@
+                        @Html.ActionLink("Details", "Details", "Courses", new { id = item.Id }, new { @class = "btn btn-info" }) |
+                        @Html.ActionLink("Delete", "DeleteCourseFromStudent", "Courses", new { cId = item.Id, sId = Model.Id }, new { @class = "btn btn-info" }) 
+                       
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!--3 now we have to change in 'Details' action to be as 'AddCourseToStudent' in student controller -->
+}
+else
+{
+        <p>This Student is not in any Courses at the moment</p>
+}
+

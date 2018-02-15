@@ -55,6 +55,7 @@ namespace EFandDB.Controllers
     
             return View(courses);
         }
+
         //5 create 'CourseToStudent' action 
         //6 change details view 
         [HttpGet]
@@ -68,6 +69,24 @@ namespace EFandDB.Controllers
 
             return RedirectToAction("Details", new { id = sId });
         }
+       
+        
+        [HttpGet]//DeleteCourseFromStudent
+        public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
+        {
+            if (sId == null || cId==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.sId = sId; //Student Id
+            ViewBag.cId = cId; //Student Id
+            return View(" ");
+        }
+
+
+
+
         // GET: Students/Create
         public ActionResult Create()
         {
