@@ -69,22 +69,30 @@ namespace EFandDB.Controllers
 
             return RedirectToAction("Details", new { id = sId });
         }
-       
         
         [HttpGet]//DeleteCourseFromStudent
         public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
         {
             if (sId == null || cId==null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
+            {return new HttpStatusCodeResult(HttpStatusCode.BadRequest);}
             ViewBag.sId = sId; //Student Id
             ViewBag.cId = cId; //Student Id
-            return View(" ");
+           // Course course=db.Students.Contains("Courses")
+            return View();  // View 
         }
 
 
+        [HttpGet]//DeleteCourseFromStudent
+        public ActionResult ConfirmDeleteCourseFromStudent(int? sId, int? cId)
+        {
+            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
+
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            student.Courses.Remove(course);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = sId });
+        }
 
 
         // GET: Students/Create
