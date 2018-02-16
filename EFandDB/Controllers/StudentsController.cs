@@ -27,18 +27,31 @@ namespace EFandDB.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == id);
-
             if (student == null)
             {
                 return HttpNotFound();
             }
-
             return View(student);
         }
 
-        //
+          [HttpGet]//DeleteCourseFromStudent
+        public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
+        {
+            if (sId == null || cId==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+           
+            ViewBag.cId = cId; //Course Id
+
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            return View(student);  // View 
+        }      
         //3 we will create 'AddCourseToStudent'
         //GET: Students/AddCourseToStudent
         //4 create view 
@@ -62,7 +75,6 @@ namespace EFandDB.Controllers
         public ActionResult CourseToStudent(int? cId,int? sId)
         {
             Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
-
             Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
             student.Courses.Add(course);
             db.SaveChanges();
@@ -70,30 +82,27 @@ namespace EFandDB.Controllers
             return RedirectToAction("Details", new { id = sId });
         }
         
-        [HttpGet]//DeleteCourseFromStudent
-        public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
+        [HttpGet]//ConfirmedDeleteCourseFromStudent
+        public ActionResult ConfirmedDeleteCourseFromStudent(int? sId, int? cId)
         {
-            if (sId == null || cId==null)
-            {return new HttpStatusCodeResult(HttpStatusCode.BadRequest);}
-            ViewBag.sId = sId; //Student Id
-            ViewBag.cId = cId; //Student Id
-           // Course course=db.Students.Contains("Courses")
-            return View();  // View 
-        }
-
-
-        [HttpGet]//DeleteCourseFromStudent
-        public ActionResult ConfirmDeleteCourseFromStudent(int? sId, int? cId)
-        {
+            if (sId == null || cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
-
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
             Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
             student.Courses.Remove(course);
             db.SaveChanges();
-
             return RedirectToAction("Details", new { id = sId });
         }
-
 
         // GET: Students/Create
         public ActionResult Create()

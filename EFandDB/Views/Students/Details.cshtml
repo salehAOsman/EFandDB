@@ -48,7 +48,7 @@
                     <td>
                         @*@Html.ActionLink("Edit", "Edit", "Courses", new { id = item.Id }, new { @class = "btn btn-info" }) |*@
                         @Html.ActionLink("Details", "Details", "Courses", new { id = item.Id }, new { @class = "btn btn-info" }) |
-                        @Html.ActionLink("Delete", "DeleteCourseFromStudent", "Courses", new { cId = item.Id, sId = Model.Id }, new { @class = "btn btn-info" }) 
+                        @Html.ActionLink("Delete", "DeleteCourseFromStudent", new { cId = item.Id, sId = Model.Id }, new { @class = "btn btn-info" }) 
                        
                     </td>
                 </tr>
