@@ -15,9 +15,34 @@ namespace EFandDB.Controllers
         private SchoolDbContext db = new SchoolDbContext();
 
         // GET: Students
-        public ActionResult Index()
+        public ActionResult Index(string orderBy)
         {
-            return View(db.Students.ToList());
+            List<Student> studentList = new List<Student>();
+            if (string.IsNullOrEmpty(orderBy))
+            {
+                ViewBag.OrderNameBy = "NameA";
+                studentList = db.Students.ToList();
+            }
+            else
+            {
+                switch (orderBy)
+                {
+                    case "NameA":
+                        studentList = db.Students.OrderBy(s => s.Name).ToList();
+                        ViewBag.OrderNameBy = "NameD";
+                        break;
+
+                    case "NameD":
+                        studentList = db.Students.OrderByDescending(s => s.Name).ToList();
+                        ViewBag.OrderNameBy = "NameA";
+                        break;
+
+                    default:
+
+                        break;
+                }
+            }
+            return View(studentList);
         }
 
         // GET: Students/Details/5  
@@ -51,10 +76,33 @@ namespace EFandDB.Controllers
                 return HttpNotFound();
             }
             return View(student);  // View 
-        }      
+        }
         //3 we will create 'AddCourseToStudent'
         //GET: Students/AddCourseToStudent
         //4 create view 
+
+        [HttpGet]//ConfirmedDeleteCourseFromStudent
+        public ActionResult ConfirmedDeleteCourseFromStudent(int? sId, int? cId)
+        {
+            if (sId == null || cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            student.Courses.Remove(course);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = sId });
+        }
+
         [HttpGet]
         public ActionResult AddCourseToStudent(int? sId)
         {
@@ -82,28 +130,6 @@ namespace EFandDB.Controllers
             return RedirectToAction("Details", new { id = sId });
         }
         
-        [HttpGet]//ConfirmedDeleteCourseFromStudent
-        public ActionResult ConfirmedDeleteCourseFromStudent(int? sId, int? cId)
-        {
-            if (sId == null || cId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
-            if (course == null)
-            {
-                return HttpNotFound();
-            }
-            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
-            student.Courses.Remove(course);
-            db.SaveChanges();
-            return RedirectToAction("Details", new { id = sId });
-        }
-
         // GET: Students/Create
         public ActionResult Create()
         {

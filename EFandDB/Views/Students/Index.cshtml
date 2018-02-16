@@ -5,7 +5,7 @@
 <p>@Html.ActionLink("Create New Student", "Create")</p>
 <table class="table">
     <tr>
-        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th><a href="@Url.Action("index", new { orderBy=ViewBag.OrderNameBy })">@Html.DisplayNameFor(model => model.Name)</a></th>
         <th>@Html.DisplayNameFor(model => model.City)</th>
         <th></th>
     </tr>
