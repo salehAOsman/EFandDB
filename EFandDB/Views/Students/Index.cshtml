@@ -5,7 +5,9 @@
 <p>@Html.ActionLink("Create New Student", "Create")</p>
 <table class="table">
     <tr>
-        <th><a href="@Url.Action("index", new { orderBy=ViewBag.OrderNameBy })">@Html.DisplayNameFor(model => model.Name)</a></th>
+        <!--we add here sorting in index for list of students-->
+        <!--we use here href="  here we write the input that will display in Url to be input for path of action "-->
+        <th><a href="@Url.Action("index","Students", new { orderBy=ViewBag.OrderNameBy })">@Html.DisplayNameFor(model => model.Name)</a></th>
         <th>@Html.DisplayNameFor(model => model.City)</th>
         <th></th>
     </tr>

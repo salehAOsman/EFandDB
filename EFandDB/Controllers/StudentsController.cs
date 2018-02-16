@@ -42,6 +42,7 @@ namespace EFandDB.Controllers
                         break;
                 }
             }
+            //we return this list to index to display 
             return View(studentList);
         }
 
@@ -69,13 +70,17 @@ namespace EFandDB.Controllers
             }
            
             ViewBag.cId = cId; //Course Id
-
-            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
-            if (student == null)
+            //know after we create new Viewmodel we can create object for dealing both classes in view side   
+            SudentCourseViewModel myViewModel = new SudentCourseViewModel();
+            myViewModel.Student = db.Students.FirstOrDefault(s => s.Id == sId);//here we fitch our student 
+            myViewModel.Course = db.Courses.FirstOrDefault(c => c.Id == cId);//here we fitch our course 
+            
+            if (myViewModel.Student == null || myViewModel.Course == null)
             {
                 return HttpNotFound();
             }
-            return View(student);  // View 
+            //now we return viewmodel object to draw both 
+            return View(myViewModel);  // View 
         }
         //3 we will create 'AddCourseToStudent'
         //GET: Students/AddCourseToStudent

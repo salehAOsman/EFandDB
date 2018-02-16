@@ -132,6 +132,7 @@
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\SchoolDbContext.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\SudentCourseViewModel.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <Content Include="Views\Assignments\Edit.cshtml" />
     <Content Include="Views\Assignments\Index.cshtml" />
     <Content Include="Views\Students\AddCourseToStudent.cshtml" />
+    <Content Include="Views\Students\DeleteCourseFromStudentOld.cshtml" />
     <Content Include="Views\Students\DeleteCourseFromStudent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
