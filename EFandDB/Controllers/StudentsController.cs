@@ -61,56 +61,7 @@ namespace EFandDB.Controllers
             return View(student);
         }
 
-          [HttpGet]//DeleteCourseFromStudent
-        public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
-        {
-            if (sId == null || cId==null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-           
-            ViewBag.cId = cId; //Course Id
-            //know after we create new Viewmodel we can create object for dealing both classes in view side   
-            SudentCourseViewModel myViewModel = new SudentCourseViewModel();
-            myViewModel.Student = db.Students.FirstOrDefault(s => s.Id == sId);//here we fitch our student 
-            myViewModel.Course = db.Courses.FirstOrDefault(c => c.Id == cId);//here we fitch our course 
-            
-            if (myViewModel.Student == null || myViewModel.Course == null)
-            {
-                return HttpNotFound();
-            }
-            //now we return viewmodel object to draw both 
-            return View(myViewModel);  // View 
-        }
-        //3 we will create 'AddCourseToStudent'
-        //GET: Students/AddCourseToStudent
-        //4 create view 
-
-        [HttpGet]//ConfirmedDeleteCourseFromStudent
-        public ActionResult ConfirmedDeleteCourseFromStudent(int? sId, int? cId)
-        {
-            if (sId == null || cId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
-            if (course == null)
-            {
-                return HttpNotFound();
-            }
-            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
-            student.Courses.Remove(course);
-            db.SaveChanges();
-            return RedirectToAction("Details", new { id = sId });
-        }
-
-
-
-
+        
         [HttpGet]
         public ActionResult AddCourseToStudent(int? sId)
         {
@@ -191,7 +142,7 @@ namespace EFandDB.Controllers
             }
             return View(student);
         }
-
+        
         // GET: Students/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -216,6 +167,55 @@ namespace EFandDB.Controllers
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+
+
+        [HttpGet]//DeleteCourseFromStudent
+        public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
+        {
+            if (sId == null || cId==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+           
+            ViewBag.cId = cId; //Course Id
+            //know after we create new Viewmodel we can create object for dealing both classes in view side   
+            SudentCourseViewModel myViewModel = new SudentCourseViewModel();
+            myViewModel.Student = db.Students.FirstOrDefault(s => s.Id == sId);//here we fitch our student 
+            myViewModel.Course = db.Courses.FirstOrDefault(c => c.Id == cId);//here we fitch our course 
+            
+            if (myViewModel.Student == null || myViewModel.Course == null)
+            {
+                return HttpNotFound();
+            }
+            //now we return viewmodel object to draw both 
+            return View(myViewModel);  // View 
+        }
+        //3 we will create 'AddCourseToStudent'
+        //GET: Students/AddCourseToStudent
+        //4 create view 
+
+        [HttpGet]//ConfirmedDeleteCourseFromStudent
+        public ActionResult ConfirmedDeleteCourseFromStudent(int? sId, int? cId)
+        {
+            if (sId == null || cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            student.Courses.Remove(course);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = sId });
         }
 
         protected override void Dispose(bool disposing)

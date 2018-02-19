@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -14,7 +13,7 @@ namespace EFandDB.Controllers
     public class TeachersController : Controller
     {
         private SchoolDbContext db = new SchoolDbContext();
-
+        
         // GET: Teachers
         public ActionResult Index(string orderBy)
         {
@@ -48,11 +47,11 @@ namespace EFandDB.Controllers
         public ActionResult CourseToTeacher(int? tId,int? cId)
         {
             Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
-            Teacher teacher = db.Teachers.SingleOrDefault(t => t.Id == tId);
-            teacher.Courses.Add(course);//added to list of teacher
+            Teacher teacher = db.Teachers.Include("Courses").SingleOrDefault(t => t.Id == tId);//we will find the teacher including his courses 
+            teacher.Courses.Add(course); //we added here this course to list of teacher
             db.SaveChanges();
 
-            return RedirectToAction("Details",new { id=tId});
+            return RedirectToAction("Details",new { id=tId});// can we add here a value like this  "id=teacher.Id"
         }
 
         [HttpGet]
@@ -62,10 +61,11 @@ namespace EFandDB.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            List<Teacher> teacher = new List<Teacher>();
-            ViewBag.tId = tId; //send id teacher in details side as confirm about the name of teacher
-            return View(teacher);
+            List<Course> courses = db.Courses.ToList(); //we need to fitch the list of courses from db.courses and converted as list  
+            ViewBag.tId = tId; //Student Id
+            return View(courses);
         }
+        
         // GET: Teachers/Details/5
         public ActionResult Details(int? id)
         {
@@ -160,6 +160,55 @@ namespace EFandDB.Controllers
             db.Teachers.Remove(teacher);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+
+
+        [HttpGet]//DeleteCourseFromTeacher
+        public ActionResult DeleteCourseFromTeacher(int? tId, int? cId)
+        {
+            if (tId == null || cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.cId = cId; //Course Id
+            //know after we create new Viewmodel we can create object for dealing both classes in view side   
+            TeacherCourseViewModel myViewModel = new TeacherCourseViewModel();
+            myViewModel.Teacher = db.Teachers.FirstOrDefault(s => s.Id == tId);//here we fitch our student 
+            myViewModel.Course = db.Courses.FirstOrDefault(c => c.Id == cId);//here we fitch our course 
+
+            if (myViewModel.Teacher == null || myViewModel.Course == null)
+            {
+                return HttpNotFound();
+            }
+            //now we return viewmodel object to draw both 
+            return View(myViewModel);  // View 
+        }
+        //3 we will create 'AddCourseToStudent'
+        //GET: Students/AddCourseToStudent
+        //4 create view 
+
+        [HttpGet]//ConfirmedDeleteCourseFromStudent
+        public ActionResult ConfirmedDeleteCourseFromTeacher(int? tId, int? cId)
+        {
+            if (tId == null || cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Course course = db.Courses.SingleOrDefault(c => c.Id == cId); // fitch course from teacher list
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            Teacher teacher = db.Teachers.Include("Courses").SingleOrDefault(t => t.Id == tId);//to fitch object include list of course
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+            teacher.Courses.Remove(course);//delete from list of teacher
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = tId });
         }
 
         protected override void Dispose(bool disposing)
