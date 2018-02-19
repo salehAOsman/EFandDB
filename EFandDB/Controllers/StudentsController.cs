@@ -108,6 +108,9 @@ namespace EFandDB.Controllers
             return RedirectToAction("Details", new { id = sId });
         }
 
+
+
+
         [HttpGet]
         public ActionResult AddCourseToStudent(int? sId)
         {

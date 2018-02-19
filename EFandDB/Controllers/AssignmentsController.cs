@@ -15,9 +15,32 @@ namespace EFandDB.Controllers
         private SchoolDbContext db = new SchoolDbContext();
 
         // GET: Assignments
-        public ActionResult Index()
+        public ActionResult Index(string orderBy)
         {
-            return View(db.Assignments.ToList());
+            List<Assignment> assignmentList = new List<Assignment>();
+
+            if (string.IsNullOrEmpty(orderBy))
+            {
+                ViewBag.orderNameBy = "NameA";
+                assignmentList = db.Assignments.ToList();
+            }
+            else
+            {
+                switch (orderBy)
+                {
+                    case "NameA":
+                        ViewBag.orderNameBy = "NameD";
+                        assignmentList = db.Assignments.OrderBy(a => a.Name).ToList();
+                        break;
+                    case "NameD":
+                        ViewBag.orderNameBy = "NameA";
+                        assignmentList = db.Assignments.OrderByDescending(a => a.Name).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return View(assignmentList);
         }
 
         // GET: Assignments/Details/5
