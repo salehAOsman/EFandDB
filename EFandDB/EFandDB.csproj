@@ -129,6 +129,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Assignment.cs" />
+    <Compile Include="Models\AssignmentCourseViewModel.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\SchoolDbContext.cs" />
     <Compile Include="Models\Student.cs" />
@@ -164,10 +165,11 @@
     <Content Include="Views\Assignments\Edit.cshtml" />
     <Content Include="Views\Assignments\Index.cshtml" />
     <Content Include="Views\Students\AddCourseToStudent.cshtml" />
-    <Content Include="Views\Students\DeleteCourseFromStudentOld.cshtml" />
     <Content Include="Views\Students\DeleteCourseFromStudent.cshtml" />
     <Content Include="Views\Teachers\AddCourseToTeacher.cshtml" />
     <Content Include="Views\Teachers\DeleteCourseFromTeacher.cshtml" />
+    <Content Include="Views\Courses\AddAssignmentToCourse.cshtml" />
+    <Content Include="Views\Courses\DeleteAssignmentFromCourse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

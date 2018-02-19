@@ -42,7 +42,7 @@ namespace EFandDB.Controllers
             }
             return View(assignmentList);
         }
-
+         
         // GET: Assignments/Details/5
         public ActionResult Details(int? id)
         {
@@ -137,7 +137,7 @@ namespace EFandDB.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

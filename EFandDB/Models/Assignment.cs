@@ -15,6 +15,6 @@ namespace EFandDB.Models
         [Required(ErrorMessage = "the description of assinment")]
         public string Descriptions { get; set; }
         //relation   * ---> 1
-        public Course AssigmedTo { get; set; }
+        public Course AssigmedTo { get; set; } //Whay I use this name "AssigmedTo" I did not use it in all code
     }
 }

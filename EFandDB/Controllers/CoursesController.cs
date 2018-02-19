@@ -13,7 +13,8 @@ namespace EFandDB.Controllers
     public class CoursesController : Controller
     {
         private SchoolDbContext db = new SchoolDbContext();
-
+        
+        #region
         // GET: Courses
         public ActionResult Index(string orderBy)
         {
@@ -53,7 +54,11 @@ namespace EFandDB.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            /*
+             * Course course = db.Courses.Find(id);
+             * //WE have to change the code 
+             * to this dawon if we have list inside this object because db does not call sublist then we would have null reference */
+            Course course = db.Courses.Include("Assignments").SingleOrDefault(a => a.Id == id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -80,7 +85,6 @@ namespace EFandDB.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             return View(course);
         }
 
@@ -140,7 +144,78 @@ namespace EFandDB.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        #endregion
+        
+        //*
+        //*1
+        [HttpGet]
+        public ActionResult AddAssignmentToCourse(int? cId)//Add Assignment To Course
+        {
+            if (cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            List<Assignment> assignments = db.Assignments.ToList();//reference to assignments list
+            ViewBag.cId = cId;//assignment Id
+            return View(assignments);
+        }
 
+        //*2
+        [HttpGet]
+        public ActionResult AssignmentToCourse(int? aId, int? cId)//Assignment To Course
+        {
+            Assignment assignment = db.Assignments.SingleOrDefault(a => a.Id == aId);
+            Course course = db.Courses.Include("Assignments").SingleOrDefault(c => c.Id == cId);
+            course.Assignments.Add(assignment);//assign assignment to list of course
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = cId });
+        }
+        //*3
+        [HttpGet] //DeleteCourseFromStudent  DeleteAssignmentFromCourse
+        public ActionResult DeleteAssignmentFromCourse(int? cId, int? aId)
+        {
+            if (cId == null || aId == null)
+            { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            ViewBag.aId = aId; //assignment Id
+            //know after we create new Viewmodel we can create object for dealing both classes in view side   
+            AssignmentCourseViewModel myViewModel = new AssignmentCourseViewModel();
+            myViewModel.Course = db.Courses.FirstOrDefault(c => c.Id == cId);//here we fitch our course 
+            myViewModel.Assignment = db.Assignments.FirstOrDefault(a => a.Id == aId);//here we fitch our student 
+
+            if (myViewModel.Assignment == null || myViewModel.Course == null)
+            {
+                return HttpNotFound();
+            }
+            //now we return viewmodel object to draw both 
+            return View(myViewModel);  // View 
+        }
+
+        //*4
+        [HttpGet]//ConfirmedDeleteAssignmentFromCourse
+        public ActionResult ConfirmedDeleteAssignmentFromCourse(int? aId, int? cId)
+        {
+            if (aId == null || cId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Assignment assignment = db.Assignments.SingleOrDefault(a => a.Id == aId);
+            if (assignment == null)
+            {
+                return HttpNotFound();
+            }
+            Course course = db.Courses.Include("Assignment").SingleOrDefault(c => c.Id == cId);
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            course.Assignments.Remove(assignment);
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = aId });
+        }
+        //*
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

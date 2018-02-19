@@ -21,7 +21,7 @@
         <td>
             @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-            @Html.ActionLink("Add", "CourseToTeacher", new { cId=item.Id,tId=ViewBag.tId })
+            @Html.ActionLink("Add", "CourseToTeacher", new { cId=item.Id,tId=ViewBag.tId,@class="btn btn-success" })
         </td>
     </tr>
 }

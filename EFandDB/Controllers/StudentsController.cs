@@ -60,34 +60,6 @@ namespace EFandDB.Controllers
             }
             return View(student);
         }
-
-        
-        [HttpGet]
-        public ActionResult AddCourseToStudent(int? sId)
-        {
-            if (sId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            List<Course> courses = db.Courses.ToList();//reference to Couses list
-
-            ViewBag.sId = sId;//Student Id
-    
-            return View(courses);
-        }
-
-        //5 create 'CourseToStudent' action 
-        //6 change details view 
-        [HttpGet]
-        public ActionResult CourseToStudent(int? cId,int? sId)
-        {
-            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
-            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
-            student.Courses.Add(course);
-            db.SaveChanges();
-
-            return RedirectToAction("Details", new { id = sId });
-        }
         
         // GET: Students/Create
         public ActionResult Create()
@@ -169,8 +141,6 @@ namespace EFandDB.Controllers
             return RedirectToAction("Index");
         }
 
-
-
         [HttpGet]//DeleteCourseFromStudent
         public ActionResult DeleteCourseFromStudent(int? sId,int? cId)
         {
@@ -218,6 +188,34 @@ namespace EFandDB.Controllers
             return RedirectToAction("Details", new { id = sId });
         }
 
+        
+        [HttpGet]
+        public ActionResult AddCourseToStudent(int? sId)
+        {
+            if (sId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            List<Course> courses = db.Courses.ToList();//reference to Couses list
+
+            ViewBag.sId = sId;//Student Id
+    
+            return View(courses);
+        }
+
+        //5 create 'CourseToStudent' action 
+        //6 change details view 
+        [HttpGet]
+        public ActionResult CourseToStudent(int? cId,int? sId)
+        {
+            Course course = db.Courses.SingleOrDefault(c => c.Id == cId);
+            Student student = db.Students.Include("Courses").SingleOrDefault(s => s.Id == sId);
+            student.Courses.Add(course);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = sId });
+        }
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -5,7 +5,7 @@
 <p>@Html.ActionLink("Add New Teacher", "Create")</p>
 <table class="table">
     <tr>
-        <th><a href="@Url.Action("Index", "Teachers", new { orderBy = ViewBag.orderNameBy })">@Html.DisplayNameFor(model => model.Name)</a></th>
+        <th><a href="@Url.Action("Index", "Teachers", new { orderBy = ViewBag.OrderNameBy })">@Html.DisplayNameFor(model => model.Name)</a></th>
         <th>@Html.DisplayNameFor(model => model.City)</th>
         <th></th>
     </tr>
@@ -16,8 +16,9 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id ,@class="btn btn-danger" })
         </td>
     </tr>
 }
 </table>
+<div>@Html.ActionLink("Back to List", "Index", "Home")</div>

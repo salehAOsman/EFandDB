@@ -21,22 +21,24 @@ namespace EFandDB.Controllers
 
             if (string.IsNullOrEmpty(orderBy))
             {
-                ViewBag.orderNameBy = "NameA";
-                teacherList = db.Teachers.ToList();
+                ViewBag.OrderNameBy = "NameA";
+                teacherList = db.Teachers.ToList();//Fitch list of teachers 
             }
             else
             {
                 switch (orderBy)
                 {
                     case "NameA":
-                        ViewBag.orderBy = "NameD";
                         teacherList = db.Teachers.OrderBy(t => t.Name).ToList();//A --> Z
+                        ViewBag.OrderNameBy = "NameD";
                         break;
                     case "NameD":
-                        ViewBag.orderBy = "NameA";
                         teacherList = db.Teachers.OrderByDescending(t => t.Name).ToList();//Z --> A
+                        ViewBag.OrderNameBy = "NameA";
                         break;
+
                     default:
+
                         break;
                 }
             }//To teacher view to display as ordering up or dawon 
